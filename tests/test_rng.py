@@ -1,6 +1,14 @@
 """Test if random number generator produces same results for same seeds."""
 import numpy as np
-from bootstrap import get_rng
+
+try:
+    from bootstrap import get_rng
+except ImportError:
+    import sys
+    import os
+
+    sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+    from bootstrap import get_rng
 
 
 def test_rng():
@@ -24,3 +32,12 @@ def test_rng():
     rng = get_rng(seed)
     integers = rng.integers(**kwargs)
     np.testing.assert_equal(integers, legacy)
+
+
+def main():
+    """Runs all tests."""
+    test_rng()
+
+
+if __name__ == "__main__":
+    main()
