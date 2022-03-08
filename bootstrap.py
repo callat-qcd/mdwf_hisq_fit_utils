@@ -68,3 +68,20 @@ def bs_corrs(corr, Nbs, Mbs=None, seed=None, return_bs_list=False, return_mbs=Fa
         return corr_bs, bs_list
     else:
         return corr_bs
+
+
+def block_data(data, bl):
+    ''' data shape is (Ncfg, ...)
+        bl = block length in configs
+    '''
+    ncfg, nt_gf = data.shape
+    if ncfg % bl == 0:
+        nb = ncfg // bl
+    else:
+        nb = ncfg // bl + 1
+    corr_bl = np.zeros([nb, nt_gf], dtype=data.dtype)
+    for b in range(nb-1):
+        corr_bl[b] = data[b*bl:(b+1)*bl].mean(axis=0)
+    corr_bl[nb-1] = data[(nb-1)*bl:].mean(axis=0)
+
+    return corr_bl
