@@ -1,18 +1,23 @@
 import numpy as np
 import random
 
-def bs_corrs(corr, Nbs, Mbs=None, seed=None, return_bs_list=False):
+def bs_corrs(corr, Nbs, Mbs=None, seed=None, return_bs_list=False, return_mbs=False):
     ''' generate bootstrap resampling of correlation function data
         Args:
-          - corr: numpy array of data (Ncfg, Nt, ...)
-          - Nbs:  the number of bootstrap samples to generate
-          - Mbs:  the number of random draws per bootstrap to generate
-                  if Mbs != Ncfg, you will have to appropriately rescale
-                  the fluctuations by sqrt( Mbs / Ncfg)
-          - seed: a string that will be hashed to seed the random number generator
+            - corr: numpy array of data (Ncfg, Nt, ...)
+            - Nbs:  the number of bootstrap samples to generate
+            - Mbs:  the number of random draws per bootstrap to generate
+                    if Mbs != Ncfg, you will have to appropriately rescale
+                    the fluctuations by sqrt( Mbs / Ncfg)
+            - seed: a string that will be hashed to seed the random number generator
 
         Return:
-          corr_bs: an array of shape [Nbs, Mbs, ...]
+            return_mbs=False
+                corr_bs: an array of shape (Nbs, Nt, ...)
+            return_mbs=True
+                corr_bs: an array of shape (Nbs, Mbs, Nt, ...)
+            return_bs_list=True
+                corr_bs, bs_list.shape = (Nbs, Mbs)
     '''
 
     Ncfg = corr.shape[0]
