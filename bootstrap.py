@@ -70,9 +70,29 @@ def bs_corrs(corr, Nbs, Mbs=None, seed=None, return_bs_list=False, return_mbs=Fa
         return corr_bs
 
 
+def bs_prior(Nbs, mean=0., sdev=1., seed=None):
+    ''' Generate bootstrap distribution of prior central values
+        Args:
+            Nbs        : number of values to return
+            mean : mean of Gaussian distribution
+            sdev : width of Gaussian distribution
+            seed : string to seed random number generator
+        Return:
+            a numpy array of length Nbs of normal(mean, sdev) values
+    '''
+    # seed the random number generator
+    rng = get_rng(seed) if seed else np.random.default_rng()
+
+    return rng.normal(loc=mean, scale=sdev, size=Nbs)
+
+
 def block_data(data, bl):
-    ''' data shape is (Ncfg, ...)
-        bl = block length in configs
+    ''' Generate "blocked" or "binned" data from original data
+        Args:
+            data : data of shape is (Ncfg, ...)
+            bl   : block length in axis=0 units
+        Return:
+            block data : data of shape (Ncfg//bl, ...)
     '''
     ncfg, nt_gf = data.shape
     if ncfg % bl == 0:
